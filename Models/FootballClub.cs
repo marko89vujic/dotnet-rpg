@@ -10,6 +10,8 @@ namespace dotnet_rpg.Models
 
         public string Country {get; set; }
 
+        public string Stadium { get; set; }
+
         public ICollection<Competition> Competitions {get; set;}
     }
 }
