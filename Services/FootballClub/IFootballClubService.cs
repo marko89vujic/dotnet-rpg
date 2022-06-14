@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using dotnet_rpg.Dtos.FootballClub;
+using dotnet_rpg.Models;
 
 namespace dotnet_rpg.Services.FootballClub
 {
     public interface IFootballClubService
     {
-        List<Models.FootballClub> GetAllFootballClubs();
+        Task<ServiceResponse<List<GetFootballClubDto>>> GetAllFootballClubs();
 
-        Models.FootballClub GetFootballClubById(int id);
+        Task<ServiceResponse<GetFootballClubDto>> GetFootballClubById(int id);
 
-        void AddFootballClub(Models.FootballClub footballClub);
+        Task AddFootballClub(AddFootballClubDto footballClub);
 
     }
 }

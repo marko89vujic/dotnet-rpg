@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using dotnet_rpg.Dtos.FootballClub;
+using dotnet_rpg.Models;
 
 namespace dotnet_rpg.Services.FootballClub
 {
     public class FootballClubService : IFootballClubService
     {
+        private IMapper _mapper;
         private IList<Models.FootballClub> _clubs = new List<Models.FootballClub>
         {
             new Models.FootballClub
@@ -27,19 +31,30 @@ namespace dotnet_rpg.Services.FootballClub
             }
         };
 
-        public void AddFootballClub(Models.FootballClub footballClub)
+        public FootballClubService(IMapper mapper)
         {
-            _clubs.Add(footballClub);
+            _mapper = mapper;
         }
 
-        public List<Models.FootballClub> GetAllFootballClubs()
+        public async Task AddFootballClub(AddFootballClubDto footballClubDto)
         {
-            return _clubs.ToList();
+            var newClub = _mapper.Map<Models.FootballClub>(footballClubDto);
+            newClub.Id = _clubs.Max(x => x.Id) + 1;
+              _clubs.Add(newClub);
         }
 
-        public Models.FootballClub GetFootballClubById(int id)
+        public async Task<ServiceResponse<List<GetFootballClubDto>>> GetAllFootballClubs()
         {
-            return _clubs.FirstOrDefault(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<List<GetFootballClubDto>>();
+            serviceResponse.Data = _mapper.Map<List<GetFootballClubDto>>(_clubs.ToList());
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetFootballClubDto>> GetFootballClubById(int id)
+        {
+            var serviceResponse = new ServiceResponse<GetFootballClubDto>();
+            serviceResponse.Data = _mapper.Map<GetFootballClubDto>(_clubs.FirstOrDefault(x => x.Id == id));
+            return serviceResponse;
         }
     }
 }

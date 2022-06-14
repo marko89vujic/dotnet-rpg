@@ -1,8 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
 using dotnet_rpg.Models;
 using dotnet_rpg.Services.FootballClub;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using dotnet_rpg.Dtos.FootballClub;
 
 namespace dotnet_rpg.Controllers
 {
@@ -19,23 +20,23 @@ namespace dotnet_rpg.Controllers
 
         // If we don't use swagger, the HttpGet attribute isn't necessary. The Ina ApiController Get prefix stands for HTTP Get controller.
         [HttpGet("GetAll")]
-        public ActionResult<IList<FootballClub>> Get()
+        public async Task<ActionResult<ServiceResponse<IList<GetFootballClubDto>>>> Get()
         {
-            return Ok(_footballClubService.GetAllFootballClubs());
+            return Ok(await _footballClubService.GetAllFootballClubs());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<FootballClub> GetById(int id)
+        public async Task<ActionResult<ServiceResponse<GetFootballClubDto>>> GetById(int id)
         {
-            return Ok(_footballClubService.GetFootballClubById(id));
+            return Ok(await _footballClubService.GetFootballClubById(id));
         }
 
         [HttpPost]
-        public ActionResult<List<FootballClub>> AddNewClub(FootballClub footballClub)
+        public async Task<ActionResult<ServiceResponse<List<GetFootballClubDto>>>> AddNewClub(AddFootballClubDto footballClubDto)
         {
-            _footballClubService.AddFootballClub(footballClub);
+            await _footballClubService.AddFootballClub(footballClubDto);
 
-            return _footballClubService.GetAllFootballClubs();
+            return await _footballClubService.GetAllFootballClubs();
         }
     }
 }
