@@ -12,6 +12,6 @@ namespace dotnet_rpg.Models
 
         public bool Success { get; set; } = true;
 
-        public string MEssage { get; set; }
+        public string Message { get; set; }
     }
 }

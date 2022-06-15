@@ -13,5 +13,9 @@ namespace dotnet_rpg.Services.FootballClub
 
         Task AddFootballClub(AddFootballClubDto footballClub);
 
+        Task<ServiceResponse<GetFootballClubDto>> UpdateFootballClub(UpdatedFootballClubDto updatedFootballClub);
+
+        Task<ServiceResponse<List<GetFootballClubDto>>> DeleteFootballClubById(int id);
+
     }
 }

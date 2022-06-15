@@ -6,7 +6,7 @@ using dotnet_rpg.Models;
 
 namespace dotnet_rpg.Dtos.FootballClub
 {
-    public class GetFootballClubDto
+    public class UpdatedFootballClubDto
     {
         public int Id { get; set; }
 
@@ -15,5 +15,7 @@ namespace dotnet_rpg.Dtos.FootballClub
         public string Country { get; set; }
 
         public string Stadium { get; set; }
+
+        public ICollection<Competition> Competitions { get; set; }
     }
 }

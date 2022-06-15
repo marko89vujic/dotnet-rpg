@@ -36,11 +36,54 @@ namespace dotnet_rpg.Services.FootballClub
             _mapper = mapper;
         }
 
-        public async Task AddFootballClub(AddFootballClubDto footballClubDto)
+        public Task AddFootballClub(AddFootballClubDto footballClubDto)
         {
             var newClub = _mapper.Map<Models.FootballClub>(footballClubDto);
             newClub.Id = _clubs.Max(x => x.Id) + 1;
-              _clubs.Add(newClub);
+            _clubs.Add(newClub);
+            return Task.CompletedTask;
+        }
+
+        public async Task<ServiceResponse<GetFootballClubDto>> UpdateFootballClub(UpdatedFootballClubDto updatedFootballClub)
+        {
+            var serviceResponse = new ServiceResponse<GetFootballClubDto>();
+            var club = _clubs.FirstOrDefault(x => x.Id == updatedFootballClub.Id);
+
+            if (club != null)
+            {
+                club.Competitions = updatedFootballClub.Competitions;
+                club.Country = updatedFootballClub.Country;
+                club.Name = updatedFootballClub.Name;
+                club.Stadium = updatedFootballClub.Stadium;
+
+                serviceResponse.Data = _mapper.Map<GetFootballClubDto>(club);
+
+                return serviceResponse;
+            }
+
+            serviceResponse.Message = "Not updated";
+            serviceResponse.Success = false;
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<GetFootballClubDto>>> DeleteFootballClubById(int id)
+        {
+            var footballClub = _clubs.FirstOrDefault(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<List<GetFootballClubDto>>();
+
+            if (footballClub != null)
+            {
+                _clubs.Remove(footballClub);
+
+                serviceResponse.Data = _mapper.Map<List<GetFootballClubDto>>(_clubs.ToList());
+
+                return serviceResponse;
+            }
+
+            serviceResponse.Message = $"There is no item with id {id.ToString()}";
+            serviceResponse.Success = false;
+
+            return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<GetFootballClubDto>>> GetAllFootballClubs()

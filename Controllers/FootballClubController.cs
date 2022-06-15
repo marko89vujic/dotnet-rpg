@@ -38,5 +38,32 @@ namespace dotnet_rpg.Controllers
 
             return await _footballClubService.GetAllFootballClubs();
         }
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetFootballClubDto>>> Update(
+            UpdatedFootballClubDto updatedFootballClub)
+        {
+            var serviceResponse =  await _footballClubService.UpdateFootballClub(updatedFootballClub);
+
+            if (serviceResponse.Data != null)
+            {
+                return Ok(serviceResponse);
+            }
+
+            return NotFound(serviceResponse);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<IList<GetFootballClubDto>>>> DeleteFootballClubById(int id)
+        {
+            var serviceResponse = await _footballClubService.DeleteFootballClubById(id);
+
+            if (serviceResponse.Data == null)
+            {
+                return NotFound(serviceResponse);
+            }
+
+            return Ok(serviceResponse);
+        }
     }
 }
