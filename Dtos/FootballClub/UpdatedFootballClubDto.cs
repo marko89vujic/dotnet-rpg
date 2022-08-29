@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using dotnet_rpg.Models;
+﻿using System.Collections.Generic;
 
 namespace dotnet_rpg.Dtos.FootballClub
 {
@@ -16,6 +12,6 @@ namespace dotnet_rpg.Dtos.FootballClub
 
         public string Stadium { get; set; }
 
-        public ICollection<Competition> Competitions { get; set; }
+        public ICollection<Models.Competition> Competitions { get; set; }
     }
 }

@@ -31,34 +31,48 @@ namespace dotnet_rpg.Services.FootballClub
         public async Task<ServiceResponse<GetFootballClubDto>> UpdateFootballClub(UpdatedFootballClubDto updatedFootballClub)
         {
             var serviceResponse = new ServiceResponse<GetFootballClubDto>();
-            var club = _footballWorldDataContext.FootballClubs.FirstOrDefault(x => x.Id == updatedFootballClub.Id);
 
-            if (club != null)
+            try
             {
-                club.Competitions = updatedFootballClub.Competitions;
-                club.Country = updatedFootballClub.Country;
-                club.Name = updatedFootballClub.Name;
-                club.Stadium = updatedFootballClub.Stadium;
+                var club = _footballWorldDataContext.FootballClubs.FirstOrDefault(x => x.Id == updatedFootballClub.Id);
 
-                serviceResponse.Data = _mapper.Map<GetFootballClubDto>(club);
+                if (club != null)
+                {
+                    club.Competitions = (ICollection<Models.Competition>)updatedFootballClub.Competitions;
+                    club.Country = updatedFootballClub.Country;
+                    club.Name = updatedFootballClub.Name;
+                    club.Stadium = updatedFootballClub.Stadium;
+
+                    serviceResponse.Data = _mapper.Map<GetFootballClubDto>(club);
+
+                    await _footballWorldDataContext.SaveChangesAsync();
+
+                    return serviceResponse;
+                }
+
+                serviceResponse.Message = $"There is not football club with id: {updatedFootballClub.Id}";
+                serviceResponse.Success = false;
 
                 return serviceResponse;
             }
-
-            serviceResponse.Message = "Not updated";
-            serviceResponse.Success = false;
-            return serviceResponse;
+            catch (Exception ex)
+            {
+                serviceResponse.Message = "Not updated";
+                serviceResponse.Success = false;
+                return serviceResponse;
+            }
         }
 
         public async Task<ServiceResponse<List<GetFootballClubDto>>> DeleteFootballClubById(int id)
         {
-            var footballClub = _footballWorldDataContext.FootballClubs.FirstOrDefault(x => x.Id == id);
+            var footballClub = await _footballWorldDataContext.FootballClubs.FirstOrDefaultAsync(x => x.Id == id);
             var serviceResponse = new ServiceResponse<List<GetFootballClubDto>>();
 
             if (footballClub != null)
             {
                 _footballWorldDataContext.FootballClubs.Remove(footballClub);
 
+                await _footballWorldDataContext.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<List<GetFootballClubDto>>(_footballWorldDataContext.FootballClubs.ToList());
 
                 return serviceResponse;
