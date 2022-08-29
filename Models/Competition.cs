@@ -6,7 +6,7 @@ namespace dotnet_rpg.Models
     {
         public int Id {get; set;}
 
-        public int Name {get; set;}
+        public string Name {get; set;}
 
         public int Prize {get; set;}
 

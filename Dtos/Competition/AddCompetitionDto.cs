@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace dotnet_rpg.Dtos.Competition
+﻿namespace dotnet_rpg.Dtos.Competition
 {
     public class AddCompetitionDto
     {
+        public string Name { get; set; }
+
+        public int Prize { get; set; }
     }
 }

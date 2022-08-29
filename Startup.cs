@@ -1,4 +1,5 @@
 using dotnet_rpg.Data;
+using dotnet_rpg.Services.Competition;
 using dotnet_rpg.Services.FootballClub;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace dotnet_rpg
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "dotnet_rpg", Version = "v1" });
             });
             services.AddScoped<IFootballClubService, FootballClubService>();
+            services.AddScoped<ICompetitionService, CompetitionService>();
             services.AddAutoMapper(typeof(Startup));
         }
 
