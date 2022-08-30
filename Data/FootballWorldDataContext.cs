@@ -13,5 +13,7 @@ namespace dotnet_rpg.Data
         public DbSet<FootballClub> FootballClubs { get; set; }
 
         public DbSet<Competition> Competitions { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dotnet_rpg.Data;
 
 namespace dotnet_rpg.Migrations
 {
     [DbContext(typeof(FootballWorldDataContext))]
-    partial class FootballWorldDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220830063345_AddUserTabel")]
+    partial class AddUserTabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,12 +70,7 @@ namespace dotnet_rpg.Migrations
                     b.Property<string>("Stadium")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FootballClubs");
                 });
@@ -112,20 +109,6 @@ namespace dotnet_rpg.Migrations
                         .HasForeignKey("CompetitionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("dotnet_rpg.Models.FootballClub", b =>
-                {
-                    b.HasOne("dotnet_rpg.Models.User", "User")
-                        .WithMany("FootballClubs")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("dotnet_rpg.Models.User", b =>
-                {
-                    b.Navigation("FootballClubs");
                 });
 #pragma warning restore 612, 618
         }

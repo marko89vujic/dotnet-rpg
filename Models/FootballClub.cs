@@ -13,5 +13,7 @@ namespace dotnet_rpg.Models
         public string Stadium { get; set; }
 
         public ICollection<Competition> Competitions {get; set;}
+
+        public User User { get; set; }
     }
 }
