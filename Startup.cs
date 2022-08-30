@@ -31,6 +31,7 @@ namespace dotnet_rpg
             });
             services.AddScoped<IFootballClubService, FootballClubService>();
             services.AddScoped<ICompetitionService, CompetitionService>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddAutoMapper(typeof(Startup));
         }
 
