@@ -1,10 +1,14 @@
 ﻿using dotnet_rpg.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace dotnet_rpg.Data
 {
@@ -12,9 +16,12 @@ namespace dotnet_rpg.Data
     {
         private FootballWorldDataContext _footballWorldDataContext;
 
-        public AuthRepository(FootballWorldDataContext footballWorldDataContext)
+        private readonly IConfiguration _configuration;
+
+        public AuthRepository(FootballWorldDataContext footballWorldDataContext, IConfiguration configuration)
         {
             _footballWorldDataContext = footballWorldDataContext;
+            _configuration = configuration;
         }
 
 
@@ -45,7 +52,7 @@ namespace dotnet_rpg.Data
             }
             else
             {
-                serviceResponse.Data = user.Id.ToString();
+                serviceResponse.Data =CreateToken(user);
             }
 
             return serviceResponse; 
@@ -99,6 +106,34 @@ namespace dotnet_rpg.Data
             }
 
             return true;
+        }
+
+        private string CreateToken(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            var key = new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = credentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+
+
+            return  tokenHandler.WriteToken(token);
         }
     }
 }
