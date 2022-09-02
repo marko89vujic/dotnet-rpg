@@ -1,12 +1,17 @@
+using System;
 using dotnet_rpg.Models;
 using dotnet_rpg.Services.FootballClub;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using dotnet_rpg.Dtos.FootballClub;
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotnet_rpg.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class FootballClubController: ControllerBase
@@ -22,6 +27,8 @@ namespace dotnet_rpg.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<IList<GetFootballClubDto>>>> Get()
         {
+            // get user id through the User property inherited from ControllerBase class.
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             return Ok(await _footballClubService.GetAllFootballClubs());
         }
 
